@@ -86,25 +86,30 @@ public class TeamManager {
     }
 
     public void addTeam(String teamName) {
+        System.out.println("teamname to add :  " + teamName);
         cache.put(teamsKey, teamName);
+        System.out.println("End of cache put job");
     }
 
     public void removeTeam(String teamName) {
         String team = (String) cache.get(teamName);
         if (team != null) {
-            @SuppressWarnings("unchecked")
+            System.out.println("teamname to add :  " + teamName);
             List<String> teams = (List<String>) cache.get(teamsKey);
             if (teams != null) {
                 teams.remove(teamName);
             }
             cache.put(teamsKey, teams);
+            System.out.println("End of cache put job");
         } else {
             System.out.println("msgTeamMissing :  " + teamName);
         }
     }
 
     public String printTeams() {
-        return (String) cache.get(teamsKey);
+        String teamnames = (String) cache.get(teamsKey);
+        System.out.println("All teams are : " + teamnames);
+        return teamnames;
 
     }
 
