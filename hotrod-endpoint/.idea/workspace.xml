@@ -19,13 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5c8f5389-b490-4515-aaae-840b793cb800" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/jboss/as/quickstarts/datagrid/hotrod/TeamManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/htconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jboss/as/quickstarts/datagrid/hotrod/FootballManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/jboss/as/quickstarts/datagrid/hotrod/Team.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/jdg.properties" beforeDir="false" />
+    <list default="true" id="5c8f5389-b490-4515-aaae-840b793cb800" name="Default Changelist" comment="Updated with Team">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jboss/as/quickstarts/datagrid/hotrod/RestApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/jboss/as/quickstarts/datagrid/hotrod/RestApiController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +48,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../microservices-redhatdatagrid-rest-messaging" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -62,6 +58,14 @@
       <option name="presentableId" value="Default" />
       <updated>1593775519540</updated>
     </task>
+    <task id="LOCAL-00001" summary="Updated with Team">
+      <created>1594044443073</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1594044443073</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -76,7 +80,15 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Updated with Team" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated with Team" />
+  </component>
   <component name="WindowStateProjectService">
+    <state x="683" y="302" width="223" height="248" key="#Notifications" timestamp="1594041697745">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="683" y="302" width="223" height="248" key="#Notifications/0.0.1600.860@0.0.1600.860" timestamp="1594041697745" />
     <state x="549" y="234" width="507" height="385" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1593808617197">
       <screen x="0" y="0" width="1600" height="860" />
     </state>
