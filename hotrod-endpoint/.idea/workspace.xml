@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5c8f5389-b490-4515-aaae-840b793cb800" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/jboss/as/quickstarts/datagrid/hotrod/TeamManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/htconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jboss/as/quickstarts/datagrid/hotrod/FootballManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/jboss/as/quickstarts/datagrid/hotrod/Team.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/jdg.properties" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1eAs1tYxcz7ojrVMI5Wpv0fvpYe" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../microservices-redhatdatagrid-rest-messaging" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5c8f5389-b490-4515-aaae-840b793cb800" name="Default Changelist" comment="" />
+      <created>1593775519540</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1593775519540</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="549" y="234" width="507" height="385" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1593808617197">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="549" y="234" width="507" height="385" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1600.860@0.0.1600.860" timestamp="1593808617197" />
+    <state x="533" y="179" width="524" height="495" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1593789702070">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="533" y="179" width="524" height="495" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1600.860@0.0.1600.860" timestamp="1593789702070" />
+    <state x="1134" y="150" width="424" height="479" key="FileChooserDialogImpl" timestamp="1594033458661">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="1134" y="150" width="424" height="479" key="FileChooserDialogImpl/0.0.1600.860@0.0.1600.860" timestamp="1594033458661" />
+    <state x="333" y="87" width="924" height="679" key="Maven.ArtifactSearchDialog" timestamp="1593799356264">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="333" y="87" width="924" height="679" key="Maven.ArtifactSearchDialog/0.0.1600.860@0.0.1600.860" timestamp="1593799356264" />
+    <state x="464" y="193" key="run.anything.popup" timestamp="1593790039721">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="464" y="193" key="run.anything.popup/0.0.1600.860@0.0.1600.860" timestamp="1593790039721" />
+    <state x="463" y="181" width="672" height="678" key="search.everywhere.popup" timestamp="1594016588323">
+      <screen x="0" y="0" width="1600" height="860" />
+    </state>
+    <state x="463" y="181" width="672" height="678" key="search.everywhere.popup/0.0.1600.860@0.0.1600.860" timestamp="1594016588323" />
+  </component>
+</project>
