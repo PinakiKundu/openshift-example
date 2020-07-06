@@ -41,59 +41,63 @@ public class TeamManager {
 
     //@Autowired
     //@Value("${jdg.host}")
-    private String JDG_HOST = "rhdgroute-datagrid.apps.35.211.184.5.nip.io";//"cache-service-hotrod-route-rhdg.apps.35.211.184.5.nip.io";
+    private String JDG_HOST = "rhdgroute-datagrid.apps.35.211.184.5.nip.io";
     //@Value("${jdg.hotrod.port}")
     private Integer HOTROD_PORT = 443;
     private static final String teamsKey = "teams";
-    private final String cacheName = "custom";
+    private static final String SERVER_NAME = "datagrid-service";
 
     private RemoteCacheManager cacheManager;
     private RemoteCache<String, Object> cache;
-    ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+
 
     @Autowired
     public TeamManager() {
         ConfigurationBuilder builder = new ConfigurationBuilder();
         builder.addServer()
               .host("datagrid-service.rhdg.svc").port(11222)
-                //.clientIntelligence(ClientIntelligence.BASIC)
                 .security()
                 .authentication().enable()
                 .username("datagrid")
-                .password("datagrid") //   IfwaxrQkNRf6O0Xs
+                .password("datagrid")
                 .serverName("datagrid-service")
-                //.saslMechanism("DIGEST-MD5")
                 .saslQop(SaslQop.AUTH)
                 .ssl()
-                //.sniHostName(JDG_HOST)
-                //.trustStoreFileName(tccl.getResource("truststore.jks").getPath())
-                //.trustStorePassword("changeit".toCharArray());
-                .trustStorePath("/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"); ///src/main/resources
+                .trustStorePath("/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt");
 
 
         cacheManager = new RemoteCacheManager(builder.build());
+        cache = cacheManager.getCache("teams");
+
         /*cacheManager.administration()
                 .withFlags(CacheContainerAdmin.AdminFlag.PERMANENT)
-                .createCache(cacheName, null);*/
+                .createCache(cacheName, null);
 
-        cache = cacheManager.getCache("teams");
         if(!cache.containsKey(teamsKey)) {
             List<String> teams = new ArrayList<String>();
             String team = "Barcelona";
             teams.add(team);
             cache.put(teamsKey, teams);
-        }
+        }*/
     }
 
     public void addTeam(String teamName) {
         System.out.println("teamname to add :  " + teamName);
-        cache.put(teamsKey, teamName);
+        List<String> teams = (List<String>) cache.get(teamsKey);
+        if (teams == null) {
+            teams = new ArrayList<String>();
+        }
+        Team t = new Team(teamName);
+        cache.put(teamName, t);
+        teams.add(teamName);
+        // maintain a list of teams under common key
+        cache.put(teamsKey, teams);
         System.out.println("End of cache put job");
     }
 
     public void removeTeam(String teamName) {
-        String team = (String) cache.get(teamName);
-        if (team != null) {
+        Team t = (Team) cache.get(teamName);
+        if (t != null) {
             System.out.println("teamname to add :  " + teamName);
             List<String> teams = (List<String>) cache.get(teamsKey);
             if (teams != null) {
@@ -106,10 +110,10 @@ public class TeamManager {
         }
     }
 
-    public String printTeams() {
-        String teamnames = (String) cache.get(teamsKey);
-        System.out.println("All teams are : " + teamnames);
-        return teamnames;
+    public List<String> printTeams() {
+        List<String> teams = (List<String>) cache.get(teamsKey);
+        System.out.println("All teams are : " + teams.stream().toString());
+        return teams;
 
     }
 
