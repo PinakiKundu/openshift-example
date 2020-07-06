@@ -1,169 +1,116 @@
-hotrod-endpoint: Example Using Remote Access to Cache via HotRod
-=========================================
-Author: Martin Gencur, Tristan Tarrant
-Level: Intermediate
-Technologies: Infinispan, Hot Rod
-Summary: The `hotrod-endpoint` quickstart demonstrates how to use Infinispan cache remotely using the Hot Rod protocol.
-Target Product: JDG
-Product Versions: JDG 7.x
-Source: <https://github.com/infinispan/jdg-quickstart>
+Using Secured Remote Access to Cache in Openshift via HotRod
+==============================================
+Example of how to setup a local Hot Rod client running against a RHDG cluster in an Openshift environment.
 
 What is it?
 -----------
 
-Hot Rod is a binary TCP client-server protocol used in JBoss Data Grid. The Hot Rod protocol facilitates faster client and server interactions in comparison to other text based protocols and allows clients to make decisions about load balancing, failover and data location operations.
+Hot Rod is a binary TCP client-server protocol used in Red Hat Data Grid. The Hot Rod protocol facilitates faster client and server interactions in comparison to other text based protocols(Memcached, REST) and allows clients to make decisions about load balancing, failover and data location operations.
 
-This quickstart demonstrates how to connect remotely to JBoss Data Grid (JDG) to store, retrieve, and remove data from cache using the Hot Rod protocol. It is a simple Football Manager console application allows you to add and remove teams, add players to or remove players from teams, or print a list of the current teams and players using the Hot Rod based connector.
-
+The `hotrod-secured-remote-access-datagrid-openshift` demo demonstrates how to connect securely to remote Red Hat Data Grid (RHDG) running on Openshift to store, retrieve, and remove data from cache using the Hot Rod protocol.
 
 System requirements
 -------------------
 
-All you need to build this project is Java 8.0 (Java SDK 1.8) or better, Maven 3.0 or better.
+All you need to build this project is:
 
-The application this project produces is designed to be run on JBoss Data Grid 7.x
+* Java 8.0 (Java SDK 1.8) or higher, 
+* Maven 3.3.x or higher.
+* Red Hat Data Grid 7.3 is running on top of Openshift 3.11
+* keytool is also needed to manage certificates, keystore and truststore
 
+The Java application is designed to be run locally
 
-Configure Maven
+Preparating Openshift Environment
 ---------------
 
-If you have not yet done so, you must [Configure Maven](https://github.com/jboss-developer/jboss-developer-shared-resources/blob/master/guides/CONFIGURE_MAVEN.md#configure-maven-to-build-and-deploy-the-quickstarts) before testing the quickstarts.
+> Some parts of this sections can be skipped if already done
+
+1. Login as admin
+
+~~~shell
+$ oc login <admin>
+~~~
+
+2. Import `datagrid-service` template
+
+~~~shell
+$ oc create -n openshift -f https://raw.githubusercontent.com/jboss-container-images/jboss-datagrid-7-openshift-image/datagrid73/services/datagrid-service-template.yaml
+~~~
+
+3. Import `jboss-datagrid-7/datagrid73-openshift` image
+
+~~~shell
+$ oc import-image -n openshift jboss-datagrid-7/datagrid73-openshift --from=registry.redhat.io/jboss-datagrid-7/datagrid73-openshift --all --confirm
+~~~
 
 
-Configure JDG
--------------
+Deploying Red Hat Data Grid 7.3.x on Openshift
+---------------
 
-1. Obtain JDG server distribution on Red Hat's Customer Portal at https://access.redhat.com/jbossnetwork/restricted/listSoftware.html
+1. Login as user and create OCP project
 
-2. Install a JDBC driver into JDG (since JDG includes H2 by default, this step may be skipped for the scope of this example). More information can be found in the DataSource Management chapter of the Administration and Configuration Guide for JBoss Enterprise Application Platform on the Customer Portal at <https://access.redhat.com/site/documentation/JBoss_Enterprise_Application_Platform/> . _NOTE: JDG does not support deploying applications so one cannot install it as a deployment._
+~~~shell
+$ oc login <user>
+$ oc new-project rhdg
+~~~
 
-3. This Quickstart uses JDBC to store the cache. To permit this, it's necessary to alter JDG configuration file (`JDG_HOME/standalone/configuration/standalone.xml`) to contain the following definitions:
+2. Deploy Red Hat Data Grid
 
-* Datasource subsystem definition:
+~~~shell
+$ oc new-app datagrid-service -n rhdg \
+    -p APPLICATION_USER=datagrid \
+    -p APPLICATION_PASSWORD=datagrid \
+    -e CACHE_NAMES=teams
+~~~
 
+3. Create a SSL Route for Hod Rod Service
 
-        <subsystem xmlns="urn:jboss:domain:datasources:4.0">
-            <!-- Define this Datasource with jndi name  java:jboss/datasources/ExampleDS -->
-            <datasources>
-                <datasource jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true" use-java-context="true">
-                    <!-- The connection URL uses H2 Database Engine with in-memory database called test -->
-                    <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1</connection-url>
-                    <!-- JDBC driver name -->
-                    <driver>h2</driver>
-                    <!-- Credentials -->
-                    <security>
-                        <user-name>sa</user-name>
-                        <password>sa</password>
-                    </security>
-                </datasource>
-                <!-- Define the JDBC driver called 'h2' -->
-                <drivers>
-                    <driver name="h2" module="com.h2database.h2">
-                        <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
-                    </driver>
-                </drivers>
-            </datasources>
-        </subsystem>
+~~~shell
+$ oc create -n rhdg route passthrough secure-datagrid-app-hotrod --service datagrid-service
+$ oc get -n rhdg route secure-datagrid-app-hotrod
 
-* Infinispan subsystem definition:
+NAME                         HOST/PORT                                                                  PATH      SERVICES           PORT      TERMINATION   WILDCARD
+secure-datagrid-app-hotrod   secure-datagrid-app-hotrod-rhdg.<Openshift Application Suffix>                       datagrid-service   hotrod    passthrough   None
+~~~
 
-        <subsystem xmlns="urn:infinispan:server:core:8.5" default-cache-container="local">
-            <cache-container name="local" default-cache="default">
-                <local-cache name="default" start="EAGER">
-                    <locking acquire-timeout="30000" concurrency-level="1000" striping="false"/>
-                </local-cache>
-                <local-cache name="memcachedCache" start="EAGER">
-                    <locking acquire-timeout="30000" concurrency-level="1000" striping="false"/>
-                </local-cache>
-                <local-cache name="namedCache" start="EAGER"/>
+Hot Rod client configuration
+----------------------------
+  
+1. Clone the current project
 
-                <!-- ADD a local cache called 'teams' -->
+~~~shell
+$ git clone https://github.com/pinakispecial/openshift-example.git
+$ cd hotrod-endpoint
+~~~
 
-                <local-cache
-                    name="teams"
-                    start="EAGER"
-                    batching="false">
+2. Edit `src/main/resources/jdg.properties` as following
 
-                    <!-- Define the locking isolation of this cache -->
-                    <locking
-                        acquire-timeout="20000"
-                        concurrency-level="500"
-                        striping="false" />
+~~~
+jdg.host=secure-datagrid-app-hotrod-rhdg.<Openshift Application Suffix>
+jdg.hotrod.port=443
+~~~
 
-                    <!-- Define the JdbcBinaryCacheStores to point to the ExampleDS previously defined -->
-                    <string-keyed-jdbc-store datasource="java:jboss/datasources/ExampleDS" passivation="false" preload="false" purge="false">
+3. Extract the trusted certificate from the `service-certs` secret
 
-                        <!-- specifies information about database table/column names and data types -->
-                        <string-keyed-table prefix="JDG">
-                            <id-column name="id" type="VARCHAR"/>
-                            <data-column name="datum" type="BINARY"/>
-                            <timestamp-column name="version" type="BIGINT"/>
-                        </string-keyed-table>
-                    </string-keyed-jdbc-store>
-                </local-cache>
-                <!-- End of local cache called 'teams' definition -->
+~~~shell
+$ oc get -n rhdg secret service-certs -o jsonpath='{.data.tls\.crt}' | base64 -d > tls.crt
+~~~
 
-            </cache-container>
-            <cache-container name="security"/>
-        </subsystem>
+4. Import the trusted certificate into a new trustore for the Java application
 
-Start JDG
----------
-
-1. Open a command line and navigate to the root of the JDG directory.
-2. The following shows the command line to start the server with the web profile:
-
-        For Linux:   $JDG_HOME/bin/standalone.sh
-        For Windows: %JDG_HOME%\bin\standalone.bat
-
+~~~shell
+$ keytool -import -noprompt -v -trustcacerts -keyalg RSA -alias datagrid-service \
+    -storepass mykeystorepass -file tls.crt -keystore src/main/resources/truststore.jks
+~~~
 
 Build and Run the Quickstart
 ----------------------------
 
-_NOTE: The following build command assumes you have configured your Maven user settings. If you have not, you must include Maven setting arguments on the command line. See [the main README](../README.md) for more information._
-
-1. Make sure you have started the JDG as described above.
-2. Open a command line and navigate to the root directory of this quickstart.
-3. Type this command to build and deploy the archive:
-
-        mvn clean package
-
-4. This will create a file at `target/jboss-hotrod-endpoint-quickstart.jar`
-
-5. Run the example application in its directory:
-
-        mvn exec:java
-
+~~~shell
+$ mvn clean spring-boot:run
+~~~
 
 Using the application
 ---------------------
-Basic usage scenarios can look like this (keyboard shortcuts will be shown to you upon start):
-
-        at  -  add a team
-        ap  -  add a player to a team
-        rt  -  remove a team
-        rp  -  remove a player from a team
-        p   -  print all teams and players
-        q   -  quit
-
-Type `q` one more time to exit the application.
-
-Run application with different classpath
-----------------------------------------
-It's possible to run this quickstart with different classpath (other than default created by mvn exec:java).
-To do this, compile quickstart with:
-
-        mvn clean package -Pcustom-classpath -Dclasspath=/custom/classpath/directory
-
-This will create a file at `target/jboss-hotrod-endpoint-quickstart.jar`.
-Then you can run it with:
-
-        java -jar target/jboss-hotrod-endpoint-quickstart.jar
-
-Debug the Application
-------------------------------------
-
-If you want to debug the source code or look at the Javadocs of any library in the project, run either of the following commands to pull them into your local repository. The IDE should then detect them.
-
-    mvn dependency:sources
-    mvn dependency:resolve -Dclassifier=javadoc
+Over browser hit localhost:8080 and all instruction will be there...
