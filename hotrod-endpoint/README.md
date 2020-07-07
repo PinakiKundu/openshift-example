@@ -108,8 +108,11 @@ Build and Run the Quickstart
 ----------------------------
 
 ~~~shell
-$ mvn clean spring-boot:run
+$ mvn clean package
+$ sudo docker build . -t <repo>:<image_name>
 ~~~
+
+Now Deploy the image on Openshift cluster.
 
 Using the application
 ---------------------
