@@ -12,11 +12,11 @@ public class RestApiController {
 
     @GetMapping("/")
     public String healthCheck() {
-        return "Service is UP and RUNNING. Please use proper GET and PUT method to enjoy the service\n" +
-                "Options are : \n" +
-                "1. Get all TeamName - /v1/ \n" +
-                "2. Add a TeamName - /v1/add/{teamName} \n" +
-                "3. Delete a TeamName - /v1/del/{teamName}";
+        return "<p><b>Service is UP and RUNNING...<b>" +
+                "<br>Please use proper GET and PUT method to enjoy the service. Options are : </br>" +
+                "<br>1. Get all TeamName - /v1 </br>" +
+                "<br>2. Add a TeamName - /v1/add/{teamName} </br>" +
+                "<br>3. Delete a TeamName - /v1/del/{teamName}";
     }
 
     @GetMapping("/v1")

@@ -91,9 +91,9 @@ public class TeamManager {
     }
 
     public void removeTeam(String teamName) {
-        String t = (String) cache.get(teamName);
+        Team t = (Team) cache.get(teamName);
         if (t != null) {
-            System.out.println("teamname to add :  " + teamName);
+            System.out.println("teamname to delete :  " + teamName);
             cache.remove(teamName);
             List<String> teams = (List<String>) cache.get(teamsKey);
             if (teams != null) {
