@@ -19,10 +19,11 @@ public class RestApiController {
                 "3. Delete a TeamName - /v1/del/{teamName}";
     }
 
-    @GetMapping("/v1/")
-    public String getTeams() {
+    @GetMapping("/v1")
+    public List<String> getTeams() {
             return teamManager.printTeams();
     }
+
     @PutMapping("/v1/add/{teamName}")
     public void addTeam(@PathVariable String teamName) {
         teamManager.addTeam(teamName);

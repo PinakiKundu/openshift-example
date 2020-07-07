@@ -56,25 +56,16 @@ public class TeamManager {
         ConfigurationBuilder builder = new ConfigurationBuilder();
         builder.addServer()
               .host("datagrid-service.rhdg.svc").port(11222)
-                //.clientIntelligence(ClientIntelligence.BASIC)
                 .security()
                 .authentication().enable()
                 .username("datagrid")
-                .password("datagrid") //   IfwaxrQkNRf6O0Xs
+                .password("datagrid")
                 .serverName("datagrid-service")
-                //.saslMechanism("DIGEST-MD5")
                 .saslQop(SaslQop.AUTH)
                 .ssl()
-                //.sniHostName(JDG_HOST)
-                //.trustStoreFileName(tccl.getResource("truststore.jks").getPath())
-                //.trustStorePassword("changeit".toCharArray());
-                .trustStorePath("/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"); ///src/main/resources
-
-
+                .trustStorePath("/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt");
         cacheManager = new RemoteCacheManager(builder.build());
-        /*cacheManager.administration()
-                .withFlags(CacheContainerAdmin.AdminFlag.PERMANENT)
-                .createCache(cacheName, null);*/
+
 
         cache = cacheManager.getCache("teams");
         if(!cache.containsKey(teamsKey)) {
@@ -87,14 +78,23 @@ public class TeamManager {
 
     public void addTeam(String teamName) {
         System.out.println("teamname to add :  " + teamName);
-        cache.put(teamsKey, teamName);
+        List<String> teams = (List<String>) cache.get(teamsKey);
+        if (teams == null) {
+            teams = new ArrayList<String>();
+        }
+        Team t = new Team(teamName);
+        cache.put(teamName, t);
+        teams.add(teamName);
+        // maintain a list of teams under common key
+        cache.put(teamsKey, teams);
         System.out.println("End of cache put job");
     }
 
     public void removeTeam(String teamName) {
-        String team = (String) cache.get(teamName);
-        if (team != null) {
+        String t = (String) cache.get(teamName);
+        if (t != null) {
             System.out.println("teamname to add :  " + teamName);
+            cache.remove(teamName);
             List<String> teams = (List<String>) cache.get(teamsKey);
             if (teams != null) {
                 teams.remove(teamName);
@@ -106,8 +106,8 @@ public class TeamManager {
         }
     }
 
-    public String printTeams() {
-        String teamnames = (String) cache.get(teamsKey);
+    public List<String> printTeams() {
+        List<String> teamnames = (List<String>) cache.get(teamsKey);
         System.out.println("All teams are : " + teamnames);
         return teamnames;
 
